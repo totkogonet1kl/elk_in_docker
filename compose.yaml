@@ -1,39 +1,40 @@
-version: '2.3'
+version: '2.4'
 services:
   elastic:
     image: elasticsearch:8.11.0
+    container_name: elas1
     environment:
       node.name: node1
-      ELASTIC_USERNAME: "admin"      
-      ELASTIC_PASSWORD: "123"        
-      discovery.type: single-node    
-      ES_JAVA_OPTS: -Xms512m -Xmx512m 
+      cluster.name: docker_elk
+      discovery.type: single-node
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
     networks:
-      - elas                      
+      - elas
     ports:
       - "9200:9200"
       - "9300:9300"
-    
+
   logstash:
     image: logstash:8.11.0
     environment:
       ES_JAVA_OPTS: -Xms512m -Xmx512m
-    depends_on: 
-      - elastic
     networks:
       - elas
-    ports: 
+    ports:
       - "5044:5044"
       - "9600:9600"
-      
+
   kibana:
-    image: kibana:8.11.0 
+    image: kibana:8.11.0
+    container_name: kib1
     networks:
       - elas
     ports:
       - "5601:5601"
-      
+    environment:
+      ELASTICSEARCH_URL: http://elas1:9200
+      ELASTICSEARCH_HOSTS: "http://elas1:9200"
+
 networks:
-   elas:
-     driver: bridge  
-  
+  elas:
+    driver: bridge
