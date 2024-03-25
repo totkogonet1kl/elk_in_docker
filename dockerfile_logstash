@@ -1,0 +1,10 @@
+FROM logstash::${STACK_VERSION}
+
+
+VOLUME ./logstash.conf:/usr/share/logstash/config/logstash.conf:ro
+
+EXPOSE 5044
+EXPOSE 9600
+
+ENV LS_JAVA_OPTS="-Xmx512m -Xms512m"
+

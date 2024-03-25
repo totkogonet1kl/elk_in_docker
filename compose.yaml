@@ -18,14 +18,8 @@ services:
        hard: -1
 
  logstash:
-   image: logstash:${STACK_VERSION}
-   volumes:
-            - "./logstash.conf:/usr/share/logstash/config/logstash.conf:ro"
-   ports:
-     - "5044:5044"
-     - "9600:9600"
-   environment:
-     LS_JAVA_OPTS: "-Xmx512m -Xms512m"
+   build: 
+     dockerfile: ./dockerfile_logstash
    depends_on:
      - elasticsearch
 
